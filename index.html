@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo приложение</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-gray-100">
+    <div x-data="todoApp()" class="container mx-auto max-w-4xl mt-12 bg-white shadow-lg rounded-lg overflow-hidden">
+        <header class="bg-blue-600 text-white py-4 px-6">
+            <h1 class="text-2xl font-bold">Мой список задач</h1>
+        </header>
+        
+        <main class="p-6">
+            <form @submit.prevent="addTask" class="mb-6 flex">
+                <input 
+                    type="text" 
+                    x-model="newTask" 
+                    placeholder="Добавить новую задачу" 
+                    class="flex-grow p-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                <button 
+                    type="submit" 
+                    class="bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                    Добавить
+                </button>
+            </form>
+            
+            <ul class="space-y-2 max-h-[600px] overflow-y-auto">
+                <template x-for="task in tasks" :key="task.id">
+                    <li class="flex items-center bg-gray-50 p-4 rounded-lg">
+                        <input 
+                            type="checkbox" 
+                            :checked="task.completed" 
+                            @change="toggleTask(task)"
+                            class="mr-2"
+                        >
+                        <span 
+                            x-text="task.text" 
+                            :class="{ 'line-through': task.completed }"
+                            @dblclick="task.editing = true"
+                            x-show="!task.editing"
+                            class="flex-grow cursor-pointer"
+                        ></span>
+                        <input 
+                            x-show="task.editing"
+                            x-model="task.text"
+                            @blur="updateTask(task)"
+                            @keyup.enter="updateTask(task)"
+                            class="flex-grow bg-white p-1 border border-gray-300 rounded"
+                        >
+                        <button 
+                            @click="deleteTask(task.id)" 
+                            class="ml-2 text-red-500 hover:text-red-700"
+                        >
+                            Удалить
+                        </button>
+                    </li>
+                </template>
+            </ul>
+            
+            <div x-show="tasks.length === 0" class="text-center py-8 text-gray-500">
+                Ваш список задач пуст. Добавьте новую задачу, чтобы начать!
+            </div>
+        </main>
+    </div>
+    
+    <script src="js/app.js"></script>
+</body>
+</html>

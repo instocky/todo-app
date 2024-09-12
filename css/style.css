@@ -1,0 +1,11 @@
+/* Дополнительные стили, если потребуются */
+.task-enter-active,
+.task-leave-active {
+    transition: all 0.3s ease;
+}
+
+.task-enter,
+.task-leave-to {
+    opacity: 0;
+    transform: translateY(-30px);
+}
